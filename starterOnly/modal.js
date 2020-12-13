@@ -1,3 +1,4 @@
+//////////////////// NAVBAR /////////////////////////
 function editNav() {
   var x = document.getElementById("myTopnav");
   if (x.className === "topnav") {
@@ -7,35 +8,22 @@ function editNav() {
   }
 }
 
-
-
-// DOM Elements
+/////////////////// LAUNCH & CLOSE THE MODEL /////////////////////
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const myForme = document.querySelectorAll(".formData");
 const closeModal = document.querySelectorAll(".close");
 
-// launch modal event
-modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
-// close modal event
-closeModal.forEach((btn) => btn.addEventListener("click", hideModal));
+// launch modal 
+modalBtn.forEach((btn) => btn.addEventListener("click", () => {
+   modalbg.style.display = "block";
+}));
+// close modal 
+closeModal.forEach((btn) => btn.addEventListener("click", () => {
+  modalbg.style.display = "none"; 
+}));
 
-// launch modal form
-function launchModal() {
-  modalbg.style.display = "block";
-}
-// close modal form
-function hideModal()
-{
-  modalbg.style.display = "none";
-}
-
-
-
-// WHEN THE BUTTON SUBMIT IS PRESSED VERIFY THE INPUTS
-function validate(e) // this is the name of the function that whe are calling
-{
-    // Store the elements we want to change iside of a Variable
+    //DOM elements (Global Variables)
     let prenom = document.getElementById('first');
     let error = document.getElementById('error');
     let nom = document.getElementById('last');
@@ -46,153 +34,98 @@ function validate(e) // this is the name of the function that whe are calling
     let error4 = document.getElementById('error4');
     let quantity = document.getElementById('quantity');
     let error5 = document.getElementById('error5');
+    let citySelector = document.getElementsByName("location");
+    let errorCity = document.getElementById('errorCity');
+    let termsCheckbox = document.getElementById('termsChecked');
+    let errorCheckbox = document.getElementById('errorCheckbox');
+    let succesMessage = document.getElementById('confirmation-message');
 
-    //////////////// CONDITIONS  /////////////////
-    if ( prenom.value == "" || prenom.value == null)// if there is an empty string OR no value at all in the input...
-      {
-        // ...add the html text to the ERROR class and add style 
-        error.innerHTML = "Veuillez entrer 2 caractères ou plus pour le champ du prenom.";
-        error.style.color = "red";
-        error.style.fontSize = "1rem";
-        return false;// dont send the form
-      }
-    else{error.innerHTML = " ";}
-    
-    if ( nom.value == "" || nom.value == null)
-      {
-        error2.innerHTML = " Veuillez entrer 2 caractères ou plus pour le champ du nom. ";
-        error2.style.color = "red";
-        error2.style.fontSize = "1rem";
+
+//////////////////// FORM VALIDATION //////////////////////
+function validate() {   
+
+    //Functions stored inside a variable with arguments inside
+    let prenomOk = validateString(prenom.value, 2, error,"Veuillez entrer 2 caractères ou plus pour le champ du prenom.");
+    let nomOk = validateString(nom.value, 2, error2, "Veuillez entrer 2 caractères ou plus pour le champ du nom.");
+    let emailOk = checkEmail(email.value, error3, "Veuillez entre votre adresse mail!");
+    let birthdateOk = validateString(birthdate.value, 2, error4, "Vous devez entrer votre date de naissance.");
+    let quantityOk = validateString(quantity.value, 1, error5, "Veuillez entrer une valeur");
+    let citySelectorOk = citySelectorFunction();
+    let termsAndConditionsOK = termsAndConditions(termsCheckbox, errorCheckbox, "Vous devez vérifier que vous acceptez les termes et conditions.");
+    // Function Called Here    
+    if(prenomOk && nomOk && emailOk && birthdateOk && quantityOk && citySelectorOk && termsAndConditionsOK ) {} 
+    return false;
+}
+
+//Validate Prenom & Nom & Birthdate & Tournes
+function validateString(entry, size, errorElt, errorMessage) {
+    if ( entry.length < size ) {
+        errorElt.innerHTML = errorMessage;
+        errorElt.style.color = "red";
+        errorElt.style.fontSize = "1rem";
         return false;
-      }
-    else{error2.innerHTML = " ";}
+    }else {
+        errorElt.innerHTML = " ";
+        return true;
+     }
+}
 
-    if ( email.value == "" || email.value == null)
-      {
-        error3.innerHTML = "Veuillez entre votre adresse mail!";
-        error3.style.color = "red";
-        error3.style.fontSize = "1rem";
-        return false;
-      } 
-    else{error3.innerHTML = "";}  
+////// Validate EMAIL /////// 
+function checkEmail(email, errorElt, errorMessage ) {
+   let patern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+   if (!email.match(patern) || email == '') {
+       errorElt.innerHTML = errorMessage;
+       errorElt.style.color = "red";
+       errorElt.style.fontSize = "1rem";
+       return false;
+   }else {
+       errorElt.innerHTML = "";
+       return true;
+   }
+}
 
-    if (birthdate.value == "" || birthdate.value == null) 
-      {
-        error4.innerHTML = "Vous devez entrer votre date de naissance.";
-        error4.style.color = "red";
-        error4.style.fontSize = "1rem";
-        return false; 
-      }
-    else{error4.innerHTML = "";} 
-
-    if (quantity.value == "" || quantity.value == null)
-      {
-        error5.innerHTML = "Rengseigner les info neccaiser";
-        error5.style.color = "red";
-        error5.style.fontSize = "1rem";
-        return false; 
-      }
-    else{error5.innerHTML = "";}  
-
-
-      ////////////////////// City selector//////////////////////
-      //DOM Elements
-      let citySelector = document.getElementsByName("location");
-      let errorCity = document.getElementById('errorCity');
-      let check1 = 0;
-
-      for(i=0; i<citySelector.length; i++)// FOR LOOP if the non of radio button is checked run te loop
-        {
-          if (citySelector[i].checked)
-          {
-            check1++;
-            break;
-          }
-        }
-
-      if (check1){}
-      else{
-        errorCity.innerHTML = "Vous devez entrer votre date de naissance.";
+////// Validate City selector ///////
+function citySelectorFunction() {
+      let check1 = false;
+      for(i=0; i<citySelector.length; i++) {
+   if (citySelector[i].checked) {
+      check1 = true;
+   }
+   }
+   if (check1 == false) {
+        errorCity.innerHTML = "Vous devez choisir une option.";
         errorCity.style.color = "red";
         errorCity.style.fontSize = "1rem";
         return false;
-      }
-
-      ////////////////////// CHECKBOX /////////////////////////
-      //DOM Elements
-      let termsCheckbox = document.getElementById('termsChecked');
-      let errorCheckbox = document.getElementById('errorCheckbox');
-
-      if ( !termsCheckbox.checked)// if checkbox it's not checked 
-       {
-         // ...add the html text to the ERROR class and add style 
-         errorCheckbox.innerHTML = "Vous devez accepter ça";
-         errorCheckbox.style.color = "red";
-         errorCheckbox.style.fontSize = "1rem";
-         return false;// dont send the form
-       }
-       else{errorCheckbox.innerHTML = "";} 
-
-     ////////////////////// SHOW SUCCES DIV ////////////////////////////
-       let succesMessage = document.getElementById('confirmation-message');
-       let test1 = false;
-       let test2 = false;
-
-       if (test1 == test2)// show this message if test1 and test2 are equal
-       {
-         succesMessage.style.display = "block";// display the div which was hidden by default
-         modalbg.style.display = "none";// hide the form 
-         return false;
-       }
-      
+   }else {
+        errorCity.innerHTML = " ";
+        return true;
+   }
 }
 
-    //////////////////  CLOSE THE SUCCES MESSAGE BOX /////////////////////
-
-    let closeButtonSucess = document.getElementById('close_button_succes');
-    let xCloseButton = document.getElementById('X-close');
-    let succesMessage = document.getElementById('confirmation-message');
-
-    //close succes message BUTTON
-    closeButtonSucess.addEventListener('click', () => {
-    if (succesMessage.style.display === "block")// if succes message box is visible
-    {
-    succesMessage.style.display = 'none';// hide it
-    }else{
-    succesMessage.style.display = 'none';// show it
-    }
-    })
-
-    //close succes message X icon
-    xCloseButton.addEventListener('click', () => {
-     if (succesMessage.style.display === "block")// if succes message box is visible
-       {
-         succesMessage.style.display = 'none';// hide it
-       }
-     else
-       {
-         succesMessage.style.display = 'none';// show it
-       }
-     })
-
-   
+//////// Validate Terms and Conditions //////
+function termsAndConditions(checkboxTerms, errorElementSelect, errorMessage ) {
+  if(!checkboxTerms.checked) {
+        errorElementSelect.innerHTML = errorMessage;
+        errorElementSelect.style.color = "red";
+        errorElementSelect.style.fontSize = "1rem";
+        return false;
+  }
+       errorElementSelect.innerHTML = "";
+       return true;
+}
+/////////////////// OPEN THE SUCCES MESSAGE BOX  ////////////////////////
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+////////////////// CLOSE THE SUCCES MESSAGE BOX //////////////////////////
+//call addEventListener on multiple elements at the same time using a LOOP
+document.querySelectorAll('.close-Succes').forEach(button =>{
+button.addEventListener('click', button => {
+if (succesMessage.style.display === "block"){
+      succesMessage.style.display = 'none';
+}else{
+      succesMessage.style.display = 'none';
+}
+})});
