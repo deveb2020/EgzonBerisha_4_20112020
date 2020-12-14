@@ -42,8 +42,8 @@ closeModal.forEach((btn) => btn.addEventListener("click", () => {
 
 
 //////////////////// FORM VALIDATION //////////////////////
-function validate() {   
-
+document.getElementById('modalBtn').addEventListener('submit', (e) => {
+    e.preventDefault();
     //Functions stored inside a variable with arguments inside
     let prenomOk = validateString(prenom.value, 2, error,"Veuillez entrer 2 caractères ou plus pour le champ du prenom.");
     let nomOk = validateString(nom.value, 2, error2, "Veuillez entrer 2 caractères ou plus pour le champ du nom.");
@@ -55,7 +55,10 @@ function validate() {
     // Function Called Here    
     if(prenomOk && nomOk && emailOk && birthdateOk && quantityOk && citySelectorOk && termsAndConditionsOK ) {} 
     return false;
-}
+}) 
+
+
+
 
 //Validate Prenom & Nom & Birthdate & Tournes
 function validateString(entry, size, errorElt, errorMessage) {
