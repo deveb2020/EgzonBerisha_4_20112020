@@ -1,4 +1,4 @@
-//////////////////// NAVBAR /////////////////////////
+///////////////////////// NAVBAR ////////////////////////////////
 function editNav() {
   var x = document.getElementById("myTopnav");
   if (x.className === "topnav") {
@@ -9,10 +9,10 @@ function editNav() {
 }
 
 /////////////////// LAUNCH & CLOSE THE MODEL /////////////////////
-const modalbg = document.querySelector(".bground");
-const modalBtn = document.querySelectorAll(".modal-btn");
-const myForme = document.querySelectorAll(".formData");
-const closeModal = document.querySelectorAll(".close");
+    const modalbg = document.querySelector(".bground");
+    const modalBtn = document.querySelectorAll(".modal-btn");
+    const myForme = document.querySelectorAll(".formData");
+    const closeModal = document.querySelectorAll(".close");
 
 // launch modal 
 modalBtn.forEach((btn) => btn.addEventListener("click", () => {
@@ -40,27 +40,38 @@ closeModal.forEach((btn) => btn.addEventListener("click", () => {
     let errorCheckbox = document.getElementById('errorCheckbox');
     let succesMessage = document.getElementById('confirmation-message');
 
-
-//////////////////// FORM VALIDATION //////////////////////
+///////////////////////// FORM VALIDATION //////////////////////////////
 document.getElementById('modalBtn').addEventListener('submit', (e) => {
     e.preventDefault();
     //Functions stored inside a variable with arguments inside
     let prenomOk = validateString(prenom.value, 2, error,"Veuillez entrer 2 caractères ou plus pour le champ du prenom.");
     let nomOk = validateString(nom.value, 2, error2, "Veuillez entrer 2 caractères ou plus pour le champ du nom.");
-    let emailOk = checkEmail(email.value, error3, "Veuillez entre votre adresse mail!");
+    let emailOk = checkEmail(email.value, error3, "Veuillez entre une adresse mail valid.");
     let birthdateOk = validateString(birthdate.value, 2, error4, "Vous devez entrer votre date de naissance.");
     let quantityOk = validateString(quantity.value, 1, error5, "Veuillez entrer une valeur");
     let citySelectorOk = citySelectorFunction();
     let termsAndConditionsOK = termsAndConditions(termsCheckbox, errorCheckbox, "Vous devez vérifier que vous acceptez les termes et conditions.");
-    // Function Called Here    
-    if(prenomOk && nomOk && emailOk && birthdateOk && quantityOk && citySelectorOk && termsAndConditionsOK ) {} 
-    return false;
+   
+    // Functions Called Here    
+    if(prenomOk && nomOk && emailOk && birthdateOk && quantityOk && citySelectorOk && termsAndConditionsOK ) {
+      //Close ModalBox and OPEN SuccesBox
+    const modalBox = document.querySelector(".bground");
+    const succesMessageBox = document.querySelector(".submbit-confirmation-bg");
+      modalBox.style.display = "none";
+      succesMessageBox.style.display = "block";  
+      //Close succesBox
+      document.querySelectorAll('.close-Succes').forEach(button =>{
+      button.addEventListener('click', button => {
+      if (succesMessage.style.display === "block"){
+            succesMessage.style.display = 'none';
+      }})});
+      //Reset the form  
+      document.getElementById('modalBtn').reset();
+    } 
+    return true;
 }) 
 
-
-
-
-//Validate Prenom & Nom & Birthdate & Tournes
+///// Validate Prenom & Nom & Birthdate & Tournes //////
 function validateString(entry, size, errorElt, errorMessage) {
     if ( entry.length < size ) {
         errorElt.innerHTML = errorMessage;
@@ -76,7 +87,7 @@ function validateString(entry, size, errorElt, errorMessage) {
 ////// Validate EMAIL /////// 
 function checkEmail(email, errorElt, errorMessage ) {
    let patern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-   if (!email.match(patern) || email == '') {
+   if (!email.toLowerCase().match(patern) || email == '') {
        errorElt.innerHTML = errorMessage;
        errorElt.style.color = "red";
        errorElt.style.fontSize = "1rem";
@@ -117,18 +128,3 @@ function termsAndConditions(checkboxTerms, errorElementSelect, errorMessage ) {
        errorElementSelect.innerHTML = "";
        return true;
 }
-/////////////////// OPEN THE SUCCES MESSAGE BOX  ////////////////////////
-
-
-
-
-////////////////// CLOSE THE SUCCES MESSAGE BOX //////////////////////////
-//call addEventListener on multiple elements at the same time using a LOOP
-document.querySelectorAll('.close-Succes').forEach(button =>{
-button.addEventListener('click', button => {
-if (succesMessage.style.display === "block"){
-      succesMessage.style.display = 'none';
-}else{
-      succesMessage.style.display = 'none';
-}
-})});
