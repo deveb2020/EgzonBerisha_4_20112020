@@ -24,21 +24,21 @@ closeModal.forEach((btn) => btn.addEventListener("click", () => {
 }));
 
     //DOM elements (Global Variables)
-    let prenom = document.getElementById('first');
-    let error = document.getElementById('error');
-    let nom = document.getElementById('last');
-    let error2 = document.getElementById('error2');
-    let email = document.getElementById('email');
-    let error3 = document.getElementById('error3');
-    let birthdate = document.getElementById('birthdate');
-    let error4 = document.getElementById('error4');
-    let quantity = document.getElementById('quantity');
-    let error5 = document.getElementById('error5');
-    let citySelector = document.getElementsByName("location");
-    let errorCity = document.getElementById('errorCity');
-    let termsCheckbox = document.getElementById('termsChecked');
-    let errorCheckbox = document.getElementById('errorCheckbox');
-    let succesMessage = document.getElementById('confirmation-message');
+    const prenom = document.getElementById('first');
+    const error = document.getElementById('error');
+    const nom = document.getElementById('last');
+    const error2 = document.getElementById('error2');
+    const email = document.getElementById('email');
+    const error3 = document.getElementById('error3');
+    const birthdate = document.getElementById('birthdate');
+    const error4 = document.getElementById('error4');
+    const quantity = document.getElementById('quantity');
+    const error5 = document.getElementById('error5');
+    const citySelector = document.getElementsByName("location");
+    const errorCity = document.getElementById('errorCity');
+    const termsCheckbox = document.getElementById('termsChecked');
+    const errorCheckbox = document.getElementById('errorCheckbox');
+    const succesMessage = document.getElementById('confirmation-message');
 
 ///////////////////////// FORM VALIDATION //////////////////////////////
 document.getElementById('modalBtn').addEventListener('submit', (e) => {
@@ -48,13 +48,13 @@ document.getElementById('modalBtn').addEventListener('submit', (e) => {
     let nomOk = validateString(nom.value, 2, error2, "Veuillez entrer 2 caractères ou plus pour le champ du nom.");
     let emailOk = checkEmail(email.value, error3, "Veuillez entre une adresse mail valid.");
     let birthdateOk = validateString(birthdate.value, 2, error4, "Vous devez entrer votre date de naissance.");
-    let quantityOk = validateString(quantity.value, 1, error5, "Veuillez entrer une valeur");
+    let quantityOk = checkTournois(quantity.value, error5, "Veuillez entrer une valeur numerique");
     let citySelectorOk = citySelectorFunction();
     let termsAndConditionsOK = termsAndConditions(termsCheckbox, errorCheckbox, "Vous devez vérifier que vous acceptez les termes et conditions.");
    
     // Functions Called Here    
     if(prenomOk && nomOk && emailOk && birthdateOk && quantityOk && citySelectorOk && termsAndConditionsOK ) {
-      //Close ModalBox and OPEN SuccesBox
+    //Close ModalBox and OPEN SuccesBox
     const modalBox = document.querySelector(".bground");
     const succesMessageBox = document.querySelector(".submbit-confirmation-bg");
       modalBox.style.display = "none";
@@ -73,15 +73,15 @@ document.getElementById('modalBtn').addEventListener('submit', (e) => {
 
 ///// Validate Prenom & Nom & Birthdate & Tournes //////
 function validateString(entry, size, errorElt, errorMessage) {
-    if ( entry.length < size ) {
-        errorElt.innerHTML = errorMessage;
-        errorElt.style.color = "red";
-        errorElt.style.fontSize = "1rem";
-        return false;
-    }else {
-        errorElt.innerHTML = " ";
-        return true;
-     }
+  if ( entry.length < size ) {
+    errorElt.innerHTML = errorMessage;
+    errorElt.style.color = "red";
+    errorElt.style.fontSize = "0.8rem";
+    return false;
+  }else {
+    errorElt.innerHTML = " ";
+    return true;
+  }
 }
 
 ////// Validate EMAIL /////// 
@@ -90,7 +90,7 @@ function checkEmail(email, errorElt, errorMessage ) {
    if (!email.toLowerCase().match(patern) || email == '') {
        errorElt.innerHTML = errorMessage;
        errorElt.style.color = "red";
-       errorElt.style.fontSize = "1rem";
+       errorElt.style.fontSize = "0.8rem";
        return false;
    }else {
        errorElt.innerHTML = "";
@@ -98,18 +98,31 @@ function checkEmail(email, errorElt, errorMessage ) {
    }
 }
 
+////// Validate Tournois //////
+function checkTournois(element, errorElt, errorMessage ) {
+  if(!/^[0-9]+$/.test(element)){
+    errorElt.innerHTML = errorMessage;
+    errorElt.style.color = "red";
+    errorElt.style.fontSize = "0.8rem";
+    return false;
+  }else {
+    errorElt.innerHTML = " ";
+    return true;
+  }
+}
+
 ////// Validate City selector ///////
 function citySelectorFunction() {
-      let check1 = false;
-      for(i=0; i<citySelector.length; i++) {
+ let check1 = false;
+ for(i=0; i<citySelector.length; i++) {
    if (citySelector[i].checked) {
       check1 = true;
    }
-   }
+ }
    if (check1 == false) {
         errorCity.innerHTML = "Vous devez choisir une option.";
         errorCity.style.color = "red";
-        errorCity.style.fontSize = "1rem";
+        errorCity.style.fontSize = "0.8rem";
         return false;
    }else {
         errorCity.innerHTML = " ";
@@ -120,11 +133,11 @@ function citySelectorFunction() {
 //////// Validate Terms and Conditions //////
 function termsAndConditions(checkboxTerms, errorElementSelect, errorMessage ) {
   if(!checkboxTerms.checked) {
-        errorElementSelect.innerHTML = errorMessage;
-        errorElementSelect.style.color = "red";
-        errorElementSelect.style.fontSize = "1rem";
-        return false;
+    errorElementSelect.innerHTML = errorMessage;
+    errorElementSelect.style.color = "red";
+    errorElementSelect.style.fontSize = "0.8rem";
+    return false;
   }
-       errorElementSelect.innerHTML = "";
-       return true;
+    errorElementSelect.innerHTML = "";
+    return true;
 }

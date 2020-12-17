@@ -573,6 +573,18 @@ border-radius: 0.7rem;
 
 @media screen and (max-width: 539px)
 {
+
+  .bground {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 2.5rem;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: rgba(255, 255, 255, 0.4) !important;
+  }
   .submbit-confirmation-bg{
     position: fixed;
     top: 3.5rem;
@@ -589,7 +601,7 @@ border-radius: 0.7rem;
     
     .confirmation-body{
     background-color: rgb(24, 23, 23);
-    height: 70vh;
+    height: 85vh;
     width: 100%;
     position: fixed;
     top: 0rem;
@@ -601,7 +613,7 @@ border-radius: 0.7rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0;
+    border-radius: 10px 10px 0 0;
     }
 }
 
@@ -611,6 +623,8 @@ footer {
   margin: 0 10px;
 }
 @media screen and (max-width: 800px) {
+
+  
   .hero-section {
     display: block;
     box-shadow: unset;
